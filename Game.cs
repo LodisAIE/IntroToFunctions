@@ -8,76 +8,122 @@ namespace HelloWorld
     
     class Game
     {
-        //Ends the game when true
-        private bool _gameOver = false;
-        string playerName;
-        int playerHealth;
-        int playerAttack;
-        string playerRole;
-        int gameState;
-        char input;
-        public void OpenMainMenu()
+        bool _gameOver = false;
+        string _playerName = "";
+        
+        void RequestName()
         {
-            
-            while(input != '1')
+            //If player already has a name, return from function
+            if(_playerName != "")
             {
+                return;
+            }
+            //Initialize input value
+            char input = ' ';
+            //Loop until valid input is given
+            while (input != '1')
+            {
+                //Clear previous text
                 Console.Clear();
-                Console.WriteLine("Welcome! Please Enter your name");
-                playerName = Console.ReadLine();
-                Console.WriteLine("Are you sure you want the name " + playerName + "?");
-                DisplayOptions("to accept name", "to enter new name");
+                //Ask user for name
+                Console.WriteLine("Please enter your name.");
+                _playerName = Console.ReadLine();
+                //Display username 
+                Console.WriteLine("Hello " + _playerName);
+                //Give the user the option to change their name
+                input = GetInput("Yes", "No", "Are you sure you want the name " + _playerName + "?");
+                if(input == '2')
+                {
+                    Console.WriteLine("Yeah thats a horrible name. Try again");
+                }
             }
         }
-        public void DisplayOptions(string option1, string option2)
+
+        void Explore()
         {
-            Console.WriteLine("Press 1 " + option1);
-            Console.WriteLine("Press 2 " + option2);
-            input = Console.ReadKey().KeyChar;
+            char input = ' ';
+            input = GetInput("Go Left", "Go right", "You came to a cross road");
+            if(input == '1')
+            {
+                Console.WriteLine("You decide to go left and a trap is sprung. " +
+                    "You're covered up to your chin in quick sand");
+                _gameOver = true;
+            }
+            else if(input == '2')
+            {
+                Console.WriteLine("You continue your journey and head towards Portlad");
+            }
+        }
+
+        void ViewStats()
+        {
+            //Prints player stats to screen
+            Console.WriteLine(_playerName);
+            Console.WriteLine("\nPress any key to continue");
+            Console.Write("> ");
             Console.ReadKey();
         }
+
+        char GetInput(string option1, string option2, string query)
+        {
+            
+            //Initialize input value
+            char input = ' ';
+            //Loop until a valid input is received
+            while(input != '1' && input != '2')
+            {
+                Console.WriteLine(query);
+                //Display options
+                Console.WriteLine("1. " + option1);
+                Console.WriteLine("2. " + option2);
+                Console.WriteLine("3. View Stats");
+                Console.Write("> ");
+                //Get input from user
+                input = Console.ReadKey().KeyChar;
+                Console.WriteLine();
+                //If the player input 3, call the view stats function
+                if(input == '3')
+                {
+                    ViewStats();
+                }
+            }
+            //return input received from user
+            return input;
+        }
+
         //Run the game
         public void Run()
         {
-            //Perform initialization tasks
             Start();
-            //Loop update routine until the game is over
-            while (!_gameOver)
+            
+            while(_gameOver == false)
             {
                 Update();
             }
-            //Perform cleanup tasks
+
             End();
         }
 
         //Performed once when the game begins
+        //Used for initializing variables 
+        //Also used for performing start up tasks that should only be done once 
         public void Start()
         {
-            gameState = 0;
-            input = ' ';
-            playerName = "Hero";
-            playerHealth = 100;
-            playerAttack = 20;
-            playerRole = "none";
+            Console.WriteLine("Welcome to my game!!!!!!!!!");
         }
 
         //Repeated until the game ends
+        //Used for all game logic that will repeat
         public void Update()
         {
-            //switch (gameState)
-            //{
-            //    case 0:
-            //        {
-            //            OpenMainMenu();
-            //            break;
-            //        }
-            //}
-            OpenMainMenu();
+            RequestName();
+            Explore();
         }
 
         //Performed once when the game ends
         public void End()
         {
-
+            Console.WriteLine("\nThank you so much for to playing my game!");
         }
     }
 }
