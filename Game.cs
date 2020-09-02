@@ -52,6 +52,43 @@ namespace HelloWorld
             else if(input == '2')
             {
                 Console.WriteLine("You continue your journey and head towards Portlad");
+                Console.ReadKey();
+            }
+            Console.Clear();
+            Console.WriteLine("Start fight encounter");
+            int enemy = 180;
+            int playerHealth = 120;
+            _gameOver = StartBattle(ref playerHealth, enemy);
+        }
+
+        bool StartBattle(ref int playerHealth, int enemyHealth)
+        {
+            char input = ' ';
+            while(playerHealth > 0 && enemyHealth > 0)
+            {
+                input = GetInput("Attack", "Defend", "What will you do?");
+                if(input == '1')
+                {
+                    enemyHealth -= 10;
+                    Console.WriteLine("You did 10 damage to the enemy");
+                }
+                else if(input == '2')
+                {
+                    Console.WriteLine("You blocked the enemies attack");
+                    Console.ReadKey();
+                    continue;
+                }
+                playerHealth -= 20;
+                Console.WriteLine("The enemy did 20 damage to you");
+                Console.ReadKey();
+            }
+            if(playerHealth <= 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
